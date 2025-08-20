@@ -1,0 +1,413 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Course Preference Advisor{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2><i class="bi bi-person-plus text-primary me-2"></i>Create Your Account</h2>
+                            <p class="text-muted">Join thousands of students discovering their perfect course match</p>
+                        </div>
+
+                        <form id="registerForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <div class="form-text">Choose a unique username (letters, numbers, underscore)</div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                                        <button type="button" class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                                                style="border: none; background: none;" onclick="togglePassword('password')">
+                                            <i class="bi bi-eye" id="password-icon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">Minimum 6 characters</div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                                        <button type="button" class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                                                style="border: none; background: none;" onclick="togglePassword('confirmPassword')">
+                                            <i class="bi bi-eye" id="confirmPassword-icon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="birthDate" class="form-label">Birth Date</label>
+                                    <input type="date" class="form-control" id="birthDate" name="birth_date" required>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="schoolName" class="form-label">School Name</label>
+                                    <input type="text" class="form-control" id="schoolName" name="school_name" placeholder="e.g., ABC Senior High School">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="gradeLevel" class="form-label">Grade Level</label>
+                                    <select class="form-select" id="gradeLevel" name="grade_level">
+                                        <option value="">Select Grade Level</option>
+                                        <option value="Grade 11">Grade 11</option>
+                                        <option value="Grade 12">Grade 12</option>
+                                        <option value="Graduate">Graduate</option>
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                    <label class="form-check-label" for="agreeTerms">
+                                        I agree to the <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a>
+                                        and <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                                    </label>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <span class="spinner-border spinner-border-sm me-2 d-none" id="loading-spinner"></span>
+                                    <i class="bi bi-person-plus me-2"></i>Create Account
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <p class="text-muted">Already have an account?
+                                <a href="{{ url_for('login') }}" class="text-decoration-none">Login here</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Terms of Service Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms of Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Acceptance of Terms</h6>
+                <p>By using the Course Preference Advisor system, you agree to these terms and conditions.</p>
+
+                <h6>2. Use of Service</h6>
+                <p>This service is designed to help Grade 12 students make informed decisions about their college course selection based on assessment results.</p>
+
+                <h6>3. User Responsibilities</h6>
+                <ul>
+                    <li>Provide accurate and truthful information</li>
+                    <li>Take assessments honestly to ensure accurate results</li>
+                    <li>Keep login credentials secure</li>
+                    <li>Use the system for educational purposes only</li>
+                </ul>
+
+                <h6>4. Data Usage</h6>
+                <p>Your assessment data will be used to provide course recommendations and may be anonymized for system improvement purposes.</p>
+
+                <h6>5. Limitations</h6>
+                <p>Assessment results are recommendations only and should be considered alongside other factors when making educational decisions.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Privacy Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Information We Collect</h6>
+                <ul>
+                    <li>Personal information (name, email, school details)</li>
+                    <li>Assessment responses and results</li>
+                    <li>System usage data</li>
+                </ul>
+
+                <h6>How We Use Your Information</h6>
+                <ul>
+                    <li>To provide personalized course recommendations</li>
+                    <li>To improve our assessment algorithms</li>
+                    <li>To generate statistical reports (anonymized)</li>
+                    <li>To communicate important updates about the service</li>
+                </ul>
+
+                <h6>Data Security</h6>
+                <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+
+                <h6>Data Retention</h6>
+                <p>We retain your data for as long as your account is active or as needed to provide services. You may request data deletion at any time.</p>
+
+                <h6>Contact Us</h6>
+                <p>If you have questions about this privacy policy, please contact us at privacy@courseadvisor.edu.ph</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Password toggle functionality
+    function togglePassword(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const passwordIcon = document.getElementById(inputId + '-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordIcon.className = 'bi bi-eye-slash';
+        } else {
+            passwordInput.type = 'password';
+            passwordIcon.className = 'bi bi-eye';
+        }
+    }
+
+    // Form validation
+    const registerForm = document.getElementById('registerForm');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Clear previous validation states
+        clearValidationStates();
+
+        // Validate form
+        if (!validateForm()) {
+            return;
+        }
+
+        // Show loading state
+        showLoadingState();
+
+        try {
+            const formData = new FormData(registerForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await apiRequest('/register', 'POST', data);
+
+            if (response.success) {
+                showToast('Registration successful! Please login to continue.', 'success');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            } else {
+                showToast(response.message || 'Registration failed. Please try again.', 'danger');
+            }
+        } catch (error) {
+            showToast('An error occurred. Please try again.', 'danger');
+            console.error('Registration error:', error);
+        } finally {
+            hideLoadingState();
+        }
+    });
+
+    function validateForm() {
+        let isValid = true;
+        const requiredFields = ['firstName', 'lastName', 'username', 'email', 'password', 'confirmPassword', 'birthDate', 'gender'];
+
+        // Validate required fields
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            const value = field.value.trim();
+
+            if (!value) {
+                showFieldError(field, 'This field is required');
+                isValid = false;
+            }
+        });
+
+        // Validate email format
+        const email = document.getElementById('email');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email.value && !emailPattern.test(email.value)) {
+            showFieldError(email, 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        // Validate username format
+        const username = document.getElementById('username');
+        const usernamePattern = /^[a-zA-Z0-9_]+$/;
+        if (username.value && !usernamePattern.test(username.value)) {
+            showFieldError(username, 'Username can only contain letters, numbers, and underscores');
+            isValid = false;
+        }
+
+        // Validate password length
+        const password = document.getElementById('password');
+        if (password.value && password.value.length < 6) {
+            showFieldError(password, 'Password must be at least 6 characters long');
+            isValid = false;
+        }
+
+        // Validate password confirmation
+        const confirmPassword = document.getElementById('confirmPassword');
+        if (password.value !== confirmPassword.value) {
+            showFieldError(confirmPassword, 'Passwords do not match');
+            isValid = false;
+        }
+
+        // Validate age (must be at least 15 years old)
+        const birthDate = document.getElementById('birthDate');
+        if (birthDate.value) {
+            const today = new Date();
+            const birth = new Date(birthDate.value);
+            const age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+
+            if (age < 15 || (age === 15 && monthDiff < 0)) {
+                showFieldError(birthDate, 'You must be at least 15 years old to register');
+                isValid = false;
+            }
+        }
+
+        // Validate terms agreement
+        const agreeTerms = document.getElementById('agreeTerms');
+        if (!agreeTerms.checked) {
+            showFieldError(agreeTerms, 'You must agree to the terms and conditions');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showFieldError(field, message) {
+        field.classList.add('is-invalid');
+        const feedback = field.parentNode.querySelector('.invalid-feedback') || field.nextElementSibling;
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+            feedback.textContent = message;
+        }
+    }
+
+    function clearValidationStates() {
+        const invalidFields = document.querySelectorAll('.is-invalid');
+        invalidFields.forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+
+        const feedbacks = document.querySelectorAll('.invalid-feedback');
+        feedbacks.forEach(feedback => {
+            feedback.textContent = '';
+        });
+    }
+
+    function showLoadingState() {
+        const submitBtn = registerForm.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('i').nextSibling;
+
+        loadingSpinner.classList.remove('d-none');
+        submitBtn.disabled = true;
+        btnText.textContent = ' Creating Account...';
+    }
+
+    function hideLoadingState() {
+        const submitBtn = registerForm.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('i').nextSibling;
+
+        loadingSpinner.classList.add('d-none');
+        submitBtn.disabled = false;
+        btnText.textContent = ' Create Account';
+    }
+
+    // Real-time validation
+    document.getElementById('email').addEventListener('blur', function() {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (this.value && !emailPattern.test(this.value)) {
+            showFieldError(this, 'Please enter a valid email address');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+
+    document.getElementById('username').addEventListener('blur', function() {
+        const usernamePattern = /^[a-zA-Z0-9_]+$/;
+        if (this.value && !usernamePattern.test(this.value)) {
+            showFieldError(this, 'Username can only contain letters, numbers, and underscores');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+
+    document.getElementById('confirmPassword').addEventListener('blur', function() {
+        const password = document.getElementById('password').value;
+        if (this.value && this.value !== password) {
+            showFieldError(this, 'Passwords do not match');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+
+    // Auto-fill today's date as maximum for birth date
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate());
+    document.getElementById('birthDate').setAttribute('max', maxDate.toISOString().split('T')[0]);
+</script>
+{% endblock %}

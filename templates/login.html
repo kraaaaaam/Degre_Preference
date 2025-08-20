@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Course Preference Advisor{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2><i class="bi bi-box-arrow-in-right text-primary me-2"></i>Welcome Back</h2>
+                            <p class="text-muted">Sign in to continue your course discovery journey</p>
+                        </div>
+
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password')">
+                                        <i class="bi bi-eye" id="password-icon"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me">
+                                        <label class="form-check-label" for="rememberMe">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <a href="#" class="text-decoration-none small" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <span class="spinner-border spinner-border-sm me-2 d-none" id="loading-spinner"></span>
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                                    Sign In
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <!-- Quick Login for Demo -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <h6><i class="bi bi-info-circle me-2"></i>Demo Accounts</h6>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button type="button" class="btn btn-sm btn-outline-info" onclick="quickLogin('admin@system.com', 'admin123')">
+                                            Admin Demo
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-info" onclick="quickLogin('student@demo.com', 'student123')">
+                                            Student Demo
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">Click to auto-fill demo credentials</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <p class="text-muted">Don't have an account yet?
+                                <a href="{{ url_for('register') }}" class="text-decoration-none">Create one here</a>
+                            </p>
+                        </div>
+
+                        <!-- Social Login (Future Enhancement) -->
+                        <!--
+                        <div class="text-center">
+                            <p class="text-muted mb-3">Or sign in with</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button type="button" class="btn btn-outline-secondary">
+                                    <i class="bi bi-google me-2"></i>Google
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary">
+                                    <i class="bi bi-facebook me-2"></i>Facebook
+                                </button>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="forgotPasswordForm">
+                <div class="modal-body">
+                    <p class="text-muted">Enter your email address and we'll send you a link to reset your password.</p>
+
+                    <div class="mb-3">
+                        <label for="resetEmail" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="resetEmail" name="email" placeholder="Enter your email" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner-border spinner-border-sm me-2 d-none" id="reset-spinner"></span>
+                        Send Reset Link
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Password toggle functionality
+    function togglePassword(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const passwordIcon = document.getElementById(inputId + '-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordIcon.className = 'bi bi-eye-slash';
+        } else {
+            passwordInput.type = 'password';
+            passwordIcon.className = 'bi bi-eye';
+        }
+    }
+
+    // Quick login for demo accounts
+    function quickLogin(email, password) {
+        document.getElementById('email').value = email;
+        document.getElementById('password').value = password;
+
+        // Add a subtle highlight effect
+        const form = document.getElementById('loginForm');
+        form.classList.add('pulse');
+        setTimeout(() => {
+            form.classList.remove('pulse');
+        }, 1000);
+    }
+
+    // Login form handling
+    const loginForm = document.getElementById('loginForm');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Clear previous validation states
+        clearValidationStates();
+
+        // Basic validation
+        if (!validateLoginForm()) {
+            return;
+        }
+
+        // Show loading state
+        showLoadingState();
+
+        try {
+            const formData = new FormData(loginForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await apiRequest('/login', 'POST', data);
+
+            if (response.success) {
+                showToast('Login successful! Redirecting...', 'success');
+
+                // Redirect after a brief delay
+                setTimeout(() => {
+                    window.location.href = response.redirect || '/dashboard';
+                }, 1500);
+            } else {
+                showToast(response.message || 'Invalid email or password. Please try again.', 'danger');
+
+                // Shake the form for visual feedback
+                loginForm.classList.add('shake');
+                setTimeout(() => {
+                    loginForm.classList.remove('shake');
+                }, 600);
+            }
+        } catch (error) {
+            showToast('Connection error. Please check your internet and try again.', 'danger');
+            console.error('Login error:', error);
+        } finally {
+            hideLoadingState();
+        }
+    });
+
+    function validateLoginForm() {
+        let isValid = true;
+
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+
+        // Validate email
+        if (!email.value.trim()) {
+            showFieldError(email, 'Email is required');
+            isValid = false;
+        } else {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email.value)) {
+                showFieldError(email, 'Please enter a valid email address');
+                isValid = false;
+            }
+        }
+
+        // Validate password
+        if (!password.value.trim()) {
+            showFieldError(password, 'Password is required');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showFieldError(field, message) {
+        field.classList.add('is-invalid');
+        const feedback = field.parentNode.parentNode.querySelector('.invalid-feedback');
+        if (feedback) {
+            feedback.textContent = message;
+        }
+    }
+
+    function clearValidationStates() {
+        const invalidFields = document.querySelectorAll('.is-invalid');
+        invalidFields.forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+
+        const feedbacks = document.querySelectorAll('.invalid-feedback');
+        feedbacks.forEach(feedback => {
+            feedback.textContent = '';
+        });
+    }
+
+    function showLoadingState() {
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+        const btnText = submitBtn.lastChild;
+
+        loadingSpinner.classList.remove('d-none');
+        submitBtn.disabled = true;
+        btnText.textContent = ' Signing In...';
+    }
+
+    function hideLoadingState() {
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+        const btnText = submitBtn.lastChild;
+
+        loadingSpinner.classList.add('d-none');
+        submitBtn.disabled = false;
+        btnText.textContent = ' Sign In';
+    }
+
+    // Forgot password form handling
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const resetSpinner = document.getElementById('reset-spinner');
+
+    forgotPasswordForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const resetEmail = document.getElementById('resetEmail');
+
+        if (!resetEmail.value.trim()) {
+            showFieldError(resetEmail, 'Email is required');
+            return;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(resetEmail.value)) {
+            showFieldError(resetEmail, 'Please enter a valid email address');
+            return;
+        }
+
+        // Show loading
+        resetSpinner.classList.remove('d-none');
+        const submitBtn = forgotPasswordForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+            // Simulate API call (implement actual password reset endpoint)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            showToast('Password reset link sent to your email!', 'success');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+            modal.hide();
+
+            // Reset form
+            forgotPasswordForm.reset();
+
+        } catch (error) {
+            showToast('Failed to send reset link. Please try again.', 'danger');
+        } finally {
+            resetSpinner.classList.add('d-none');
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Clear validation on input
+    document.getElementById('email').addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+
+    document.getElementById('password').addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+
+    // Auto-focus email field
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('email').focus();
+    });
+
+    // Add shake animation CSS
+    const shakeStyle = document.createElement('style');
+    shakeStyle.textContent = `
+        .shake {
+            animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            20%, 80% {
+                transform: translate3d(2px, 0, 0);
+            }
+            30%, 50%, 70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+            40%, 60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    `;
+    document.head.appendChild(shakeStyle);
+</script>
+{% endblock %}

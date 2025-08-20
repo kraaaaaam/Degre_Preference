@@ -1,0 +1,402 @@
+{% extends "base.html" %}
+
+{% block title %}Course Preference Advisor - Find Your Perfect Course Match{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="hero-title fade-in">Find Your Perfect Course Match</h1>
+                <p class="hero-subtitle fade-in">Take our comprehensive NCAE-based assessment to discover the ideal college course for your future career success.</p>
+
+                {% if session.user_id %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg pulse">
+                    <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                </a>
+                {% else %}
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Get Started
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card text-center fade-in">
+                    <div class="feature-icon">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+                    <h4>Comprehensive Assessment</h4>
+                    <p class="text-muted">Take a scientifically-designed assessment based on the National Career Assessment Examination (NCAE) to evaluate your abilities and interests.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card text-center fade-in" style="animation-delay: 0.2s;">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h4>Intelligent Recommendations</h4>
+                    <p class="text-muted">Get personalized course recommendations powered by advanced algorithms that match your strengths with the right academic programs.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card text-center fade-in" style="animation-delay: 0.4s;">
+                    <div class="feature-icon">
+                        <i class="bi bi-mortarboard"></i>
+                    </div>
+                    <h4>Career Guidance</h4>
+                    <p class="text-muted">Discover detailed information about career opportunities, salary expectations, and job market demand for each recommended course.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Assessment Domains Section -->
+<section class="py-5" style="background: rgba(255, 255, 255, 0.1);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <h2 class="text-white">Assessment Areas</h2>
+                <p class="text-white-50">Our comprehensive evaluation covers all key domains</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-chat-text feature-icon"></i>
+                        <h5>General Abilities</h5>
+                        <p class="text-muted">Verbal, Mathematical, Scientific, and Logical Reasoning</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-tools feature-icon"></i>
+                        <h5>Specific Aptitudes</h5>
+                        <p class="text-muted">Mechanical, Clerical, Artistic, Musical, and Social Service</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-heart feature-icon"></i>
+                        <h5>Interest Inventory</h5>
+                        <p class="text-muted">Career interests and personal preferences</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-star feature-icon"></i>
+                        <h5>Work Values</h5>
+                        <p class="text-muted">What you value most in your future career</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <h2 class="text-white">How It Works</h2>
+                <p class="text-white-50">Simple steps to discover your ideal course</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 text-center mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">1</span>
+                        </div>
+                        <h5>Register Account</h5>
+                        <p class="text-muted">Create your account with basic information</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 text-center mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">2</span>
+                        </div>
+                        <h5>Take Assessment</h5>
+                        <p class="text-muted">Complete the comprehensive NCAE-based evaluation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 text-center mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">3</span>
+                        </div>
+                        <h5>Get Results</h5>
+                        <p class="text-muted">Receive detailed analysis of your strengths and abilities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 text-center mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="h4 mb-0">4</span>
+                        </div>
+                        <h5>Choose Course</h5>
+                        <p class="text-muted">Explore personalized course recommendations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5" style="background: rgba(255, 255, 255, 0.1);">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="text-white">
+                    <h3 class="display-4 fw-bold">1000+</h3>
+                    <p class="lead">Students Assessed</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="text-white">
+                    <h3 class="display-4 fw-bold">50+</h3>
+                    <p class="lead">Course Options</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="text-white">
+                    <h3 class="display-4 fw-bold">95%</h3>
+                    <p class="lead">Accuracy Rate</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="text-white">
+                    <h3 class="display-4 fw-bold">24/7</h3>
+                    <p class="lead">Available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="card">
+                    <div class="card-body py-5">
+                        <h3>Ready to Discover Your Perfect Course?</h3>
+                        <p class="lead text-muted mb-4">Join thousands of students who have found their ideal academic path through our intelligent assessment system.</p>
+
+                        {% if session.user_id %}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-speedometer2 me-2"></i>Start Assessment Now
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-3">
+                            <i class="bi bi-person-plus me-2"></i>Register Now
+                        </a>
+                        <a href="#learn-more" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-info-circle me-2"></i>Learn More
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section id="learn-more" class="py-5" style="background: rgba(255, 255, 255, 0.05);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3 class="text-white mb-4">Why Choose Our Assessment?</h3>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                            <div class="text-white">
+                                <h6>Scientifically Validated</h6>
+                                <p class="text-white-50 small">Based on the proven NCAE methodology used nationwide</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                            <div class="text-white">
+                                <h6>Comprehensive Analysis</h6>
+                                <p class="text-white-50 small">Evaluates multiple domains of abilities and interests</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                            <div class="text-white">
+                                <h6>Personalized Results</h6>
+                                <p class="text-white-50 small">Tailored recommendations based on your unique profile</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
+                            <div class="text-white">
+                                <h6>Career Insights</h6>
+                                <p class="text-white-50 small">Detailed information about job prospects and earnings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Sample Assessment Areas</h5>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: 85%">
+                                Verbal Reasoning - 85%
+                            </div>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 92%">
+                                Mathematical Ability - 92%
+                            </div>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 78%">
+                                Scientific Reasoning - 78%
+                            </div>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 88%">
+                                Logical Thinking - 88%
+                            </div>
+                        </div>
+                        <p class="text-muted small">Example of personalized results you'll receive</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Animate progress bars on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all fade-in elements
+    document.querySelectorAll('.fade-in').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s ease-out';
+        observer.observe(el);
+    });
+
+    // Counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.display-4');
+        counters.forEach(counter => {
+            const target = counter.textContent;
+            const numTarget = parseInt(target.replace(/\D/g, ''));
+            let count = 0;
+            const increment = numTarget / 100;
+
+            const timer = setInterval(() => {
+                count += increment;
+                if (count >= numTarget) {
+                    counter.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    if (target.includes('%')) {
+                        counter.textContent = Math.floor(count) + '%';
+                    } else if (target.includes('+')) {
+                        counter.textContent = Math.floor(count) + '+';
+                    } else {
+                        counter.textContent = Math.floor(count);
+                    }
+                }
+            }, 20);
+        });
+    }
+
+    // Trigger counter animation when statistics section is visible
+    const statsSection = document.querySelector('section:has(.display-4)');
+    if (statsSection) {
+        const statsObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statsObserver.observe(statsSection);
+    }
+</script>
+{% endblock %}

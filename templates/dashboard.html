@@ -1,0 +1,541 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Course Preference Advisor{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="mb-2">Welcome back, {{ user.first_name }}!</h2>
+                                <p class="text-muted mb-0">Ready to discover your perfect course match? Start or continue your assessment journey below.</p>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <div class="d-flex align-items-center justify-content-md-end">
+                                    <div class="me-3">
+                                        <small class="text-muted">Member since</small><br>
+                                        <small><strong>{{ user.created_at.strftime('%B %Y') }}</strong></small>
+                                    </div>
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                        <span class="h4 mb-0">{{ user.first_name[0] }}{{ user.last_name[0] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 border-primary">
+                    <div class="card-body text-center">
+                        <i class="bi bi-play-circle feature-icon text-primary"></i>
+                        <h5>Start New Assessment</h5>
+                        <p class="text-muted">Take the comprehensive NCAE-based assessment to discover your ideal course match.</p>
+                        <button class="btn btn-primary" onclick="startAssessment()">
+                            <i class="bi bi-play-fill me-2"></i>Begin Assessment
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 border-success">
+                    <div class="card-body text-center">
+                        <i class="bi bi-clock-history feature-icon text-success"></i>
+                        <h5>Continue Assessment</h5>
+                        <p class="text-muted">Resume your previous assessment session and complete where you left off.</p>
+                        <button class="btn btn-success" id="continueBtn" onclick="continueAssessment()" disabled>
+                            <i class="bi bi-arrow-right me-2"></i>Continue
+                        </button>
+                        <small class="text-muted d-block mt-2" id="continueStatus">No pending assessment</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 border-info">
+                    <div class="card-body text-center">
+                        <i class="bi bi-graph-up feature-icon text-info"></i>
+                        <h5>View Results</h5>
+                        <p class="text-muted">Review your assessment results and course recommendations from previous sessions.</p>
+                        <button class="btn btn-info" onclick="viewResults()">
+                            <i class="bi bi-eye me-2"></i>View Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment History -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Assessment History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="historyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Overall Score</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox display-4 d-block mb-2"></i>
+                                            No assessment history found. Start your first assessment above!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Information -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-person me-2"></i>Profile Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Name:</strong></div>
+                            <div class="col-sm-8">{{ user.first_name }} {{ user.last_name }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Email:</strong></div>
+                            <div class="col-sm-8">{{ user.email }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>School:</strong></div>
+                            <div class="col-sm-8">{{ user.school_name or 'Not specified' }}</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Grade:</strong></div>
+                            <div class="col-sm-8">{{ user.grade_level or 'Not specified' }}</div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="bi bi-pencil me-2"></i>Edit Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Assessment Tips</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Answer all questions honestly for accurate results
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Take the assessment in a quiet, distraction-free environment
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Allow 60-90 minutes to complete the full assessment
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                You can pause and resume the assessment at any time
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Review your results carefully and consider multiple factors
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="totalAssessments">0</div>
+                    <div>Assessments Taken</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="bestScore">-</div>
+                    <div>Best Score</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="avgScore">-</div>
+                    <div>Average Score</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="coursesRecommended">-</div>
+                    <div>Courses Recommended</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editProfileForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editFirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="editFirstName" value="{{ user.first_name }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editLastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="editLastName" value="{{ user.last_name }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSchool" class="form-label">School Name</label>
+                        <input type="text" class="form-control" id="editSchool" value="{{ user.school_name or '' }}" placeholder="Enter your school name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editGrade" class="form-label">Grade Level</label>
+                        <select class="form-select" id="editGrade">
+                            <option value="">Select Grade Level</option>
+                            <option value="Grade 11" {{ 'selected' if user.grade_level == 'Grade 11' }}>Grade 11</option>
+                            <option value="Grade 12" {{ 'selected' if user.grade_level == 'Grade 12' }}>Grade 12</option>
+                            <option value="Graduate" {{ 'selected' if user.grade_level == 'Graduate' }}>Graduate</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner-border spinner-border-sm me-2 d-none" id="profile-spinner"></span>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Assessment Loading Modal -->
+<div class="modal fade" id="assessmentLoadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+                <h5>Preparing Your Assessment</h5>
+                <p class="text-muted">Please wait while we set up your personalized assessment session...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let userStats = {
+        totalAssessments: 0,
+        bestScore: 0,
+        avgScore: 0,
+        coursesRecommended: 0
+    };
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDashboardData();
+    });
+
+    async function loadDashboardData() {
+        try {
+            // Load assessment history
+            await loadAssessmentHistory();
+
+            // Load user statistics
+            await loadUserStats();
+
+            // Check for pending assessments
+            await checkPendingAssessment();
+
+        } catch (error) {
+            console.error('Failed to load dashboard data:', error);
+            showToast('Failed to load some dashboard data', 'warning');
+        }
+    }
+
+    async function loadAssessmentHistory() {
+        try {
+            // Simulate API call - replace with actual endpoint
+            const response = await fetch('/api/user/assessment-history');
+            if (response.ok) {
+                const data = await response.json();
+                updateHistoryTable(data.assessments || []);
+            }
+        } catch (error) {
+            console.error('Failed to load assessment history:', error);
+        }
+    }
+
+    function updateHistoryTable(assessments) {
+        const tbody = document.querySelector('#historyTable tbody');
+
+        if (assessments.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="bi bi-inbox display-4 d-block mb-2"></i>
+                        No assessment history found. Start your first assessment above!
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = assessments.map(assessment => `
+            <tr>
+                <td>${new Date(assessment.date).toLocaleDateString()}</td>
+                <td>
+                    <span class="badge bg-${getStatusColor(assessment.status)}">
+                        ${assessment.status}
+                    </span>
+                </td>
+                <td>
+                    ${assessment.overall_score ? assessment.overall_score.toFixed(1) + '%' : '-'}
+                </td>
+                <td>${assessment.duration || '-'}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        ${assessment.status === 'completed' ?
+                            `<button class="btn btn-outline-primary" onclick="viewDetailedResults(${assessment.id})">
+                                <i class="bi bi-eye"></i>
+                            </button>` : ''
+                        }
+                        ${assessment.status === 'in_progress' ?
+                            `<button class="btn btn-outline-success" onclick="continueSpecificAssessment('${assessment.session_token}')">
+                                <i class="bi bi-play"></i>
+                            </button>` : ''
+                        }
+                        <button class="btn btn-outline-secondary" onclick="downloadReport(${assessment.id})">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+        userStats.totalAssessments = assessments.length;
+    }
+
+    function getStatusColor(status) {
+        const colors = {
+            'completed': 'success',
+            'in_progress': 'warning',
+            'abandoned': 'danger',
+            'started': 'info'
+        };
+        return colors[status] || 'secondary';
+    }
+
+    async function loadUserStats() {
+        try {
+            // Simulate API call - replace with actual endpoint
+            const response = await fetch('/api/user/statistics');
+            if (response.ok) {
+                const data = await response.json();
+                updateStatsDisplay(data.stats || {});
+            }
+        } catch (error) {
+            console.error('Failed to load user statistics:', error);
+        }
+    }
+
+    function updateStatsDisplay(stats) {
+        document.getElementById('totalAssessments').textContent = stats.total_assessments || userStats.totalAssessments;
+        document.getElementById('bestScore').textContent = stats.best_score ? stats.best_score.toFixed(1) + '%' : '-';
+        document.getElementById('avgScore').textContent = stats.avg_score ? stats.avg_score.toFixed(1) + '%' : '-';
+        document.getElementById('coursesRecommended').textContent = stats.courses_recommended || '-';
+    }
+
+    async function checkPendingAssessment() {
+        try {
+            // Simulate API call - replace with actual endpoint
+            const response = await fetch('/api/user/pending-assessment');
+            if (response.ok) {
+                const data = await response.json();
+                updateContinueButton(data.pending_assessment);
+            }
+        } catch (error) {
+            console.error('Failed to check pending assessment:', error);
+        }
+    }
+
+    function updateContinueButton(pendingAssessment) {
+        const continueBtn = document.getElementById('continueBtn');
+        const continueStatus = document.getElementById('continueStatus');
+
+        if (pendingAssessment) {
+            continueBtn.disabled = false;
+            continueBtn.setAttribute('data-session-token', pendingAssessment.session_token);
+            continueStatus.textContent = `${pendingAssessment.answered_questions}/${pendingAssessment.total_questions} questions completed`;
+        } else {
+            continueBtn.disabled = true;
+            continueStatus.textContent = 'No pending assessment';
+        }
+    }
+
+    async function startAssessment() {
+        const loadingModal = new bootstrap.Modal(document.getElementById('assessmentLoadingModal'));
+        loadingModal.show();
+
+        try {
+            const response = await apiRequest('/assessment/start', 'POST');
+
+            if (response.success) {
+                // Redirect to assessment page
+                window.location.href = `/assessment?token=${response.session_token}`;
+            } else {
+                loadingModal.hide();
+                showToast(response.message || 'Failed to start assessment', 'danger');
+            }
+        } catch (error) {
+            loadingModal.hide();
+            showToast('Failed to start assessment. Please try again.', 'danger');
+            console.error('Assessment start error:', error);
+        }
+    }
+
+    function continueAssessment() {
+        const continueBtn = document.getElementById('continueBtn');
+        const sessionToken = continueBtn.getAttribute('data-session-token');
+
+        if (sessionToken) {
+            window.location.href = `/assessment?token=${sessionToken}`;
+        }
+    }
+
+    function continueSpecificAssessment(sessionToken) {
+        window.location.href = `/assessment?token=${sessionToken}`;
+    }
+
+    function viewResults() {
+        // Redirect to results page or show results modal
+        window.location.href = '/results';
+    }
+
+    function viewDetailedResults(resultId) {
+        window.location.href = `/results/${resultId}`;
+    }
+
+    async function downloadReport(assessmentId) {
+        try {
+            const response = await fetch(`/api/assessment/${assessmentId}/report`);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `assessment_report_${assessmentId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } else {
+                showToast('Failed to download report', 'danger');
+            }
+        } catch (error) {
+            showToast('Failed to download report', 'danger');
+            console.error('Download error:', error);
+        }
+    }
+
+    // Profile editing
+    const editProfileForm = document.getElementById('editProfileForm');
+    const profileSpinner = document.getElementById('profile-spinner');
+
+    editProfileForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        profileSpinner.classList.remove('d-none');
+        const submitBtn = editProfileForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+            const formData = {
+                first_name: document.getElementById('editFirstName').value,
+                last_name: document.getElementById('editLastName').value,
+                school_name: document.getElementById('editSchool').value,
+                grade_level: document.getElementById('editGrade').value
+            };
+
+            const response = await apiRequest('/api/user/profile', 'PUT', formData);
+
+            if (response.success) {
+                showToast('Profile updated successfully!', 'success');
+
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                modal.hide();
+
+                // Refresh page to show updated info
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showToast(response.message || 'Failed to update profile', 'danger');
+            }
+        } catch (error) {
+            showToast('Failed to update profile', 'danger');
+            console.error('Profile update error:', error);
+        } finally {
+            profileSpinner.classList.add('d-none');
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Auto-refresh dashboard data every 5 minutes
+    setInterval(loadDashboardData, 5 * 60 * 1000);
+
+    // Add some interactive animations
+    document.querySelectorAll('.stats-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+</script>
+{% endblock %}
